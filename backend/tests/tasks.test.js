@@ -75,6 +75,10 @@ describe('Tasks API', () => {
       expect(res.body.task.title).toBe('Critical system outage');
       // AI should classify as critical due to "Critical" and "outage" keywords
       expect(res.body.task.priority).toBe('critical');
+      expect(res.body.task.ai_priority).toBe('critical');
+      expect(res.body.task.ai_confidence).toBeGreaterThanOrEqual(0.9);
+      expect(Array.isArray(res.body.task.ai_tags)).toBe(true);
+      expect(res.body.task.ai_summary).toBeDefined();
     });
 
     it('should return 401 without authentication', async () => {

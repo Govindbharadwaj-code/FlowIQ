@@ -15,6 +15,7 @@ export default function TaskDetailPage() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState('');
+  const [assignUserId, setAssignUserId] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [actionLoading, setActionLoading] = useState('');
 
@@ -180,10 +181,9 @@ export default function TaskDetailPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {canManage && task.status !== 'resolved' && task.status !== 'closed' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <input className="form-input" id="assignInput" placeholder="User UUID to assign" style={{ fontSize: '12px' }} />
+                  <input className="form-input" placeholder="User UUID to assign" style={{ fontSize: '12px' }} value={assignUserId} onChange={(e) => setAssignUserId(e.target.value)} />
                   <button className="btn btn-secondary" style={{ justifyContent: 'center', width: '100%' }} onClick={() => {
-                    const val = document.getElementById('assignInput').value;
-                    if (val) handleAction('assign', { assigned_to: val });
+                    if (assignUserId) { handleAction('assign', { assigned_to: assignUserId }); setAssignUserId(''); }
                   }} disabled={actionLoading === 'assign'}>
                     <UserCheck size={15} /> {actionLoading === 'assign' ? 'Assigning...' : 'Assign Task'}
                   </button>
