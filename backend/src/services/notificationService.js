@@ -1,6 +1,12 @@
 const { query } = require('../config/database');
 const logger = require('../config/logger');
 
+let _io = null;
+
+const setSocketIO = (io) => {
+  _io = io;
+};
+
 const createNotification = async (userId, title, message, type = 'info', referenceType = null, referenceId = null) => {
   try {
     const result = await query(
@@ -10,10 +16,8 @@ const createNotification = async (userId, title, message, type = 'info', referen
     );
     const notification = result.rows[0];
 
-    // Emit via Socket.IO if io is available
-    const app = require('../app');
-    if (app.io) {
-      app.io.to(`user:${userId}`).emit('notification', notification);
+    if (_io) {
+      _io.to(`user:${userId}`).emit('notification', notification);
     }
 
     return notification;
@@ -23,4 +27,4 @@ const createNotification = async (userId, title, message, type = 'info', referen
   }
 };
 
-module.exports = { createNotification };
+module.exports = { createNotification, setSocketIO };

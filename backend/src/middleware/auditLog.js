@@ -28,7 +28,7 @@ const createAuditLog = (action, resourceType) => {
     res.json = (data) => {
       const userId = req.user?.id || null;
       const resourceId = req.params?.id || null;
-      const ip = req.ip || req.connection?.remoteAddress;
+      const ip = req.ip || req.socket?.remoteAddress;
       const userAgent = req.headers['user-agent'];
       logAction(userId, action, resourceType, resourceId, null, null, ip, userAgent);
       return originalJson(data);
